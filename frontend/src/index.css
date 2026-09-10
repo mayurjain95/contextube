@@ -1,0 +1,19 @@
+:root {
+  font-family: 'Space Grotesk', 'Helvetica Neue', sans-serif;
+  color: #f2f0eb;
+  background: #101112;
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #101112;
+  color: #f2f0eb;
+}
+
+button, input { font: inherit; }
