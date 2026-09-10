@@ -52,7 +52,7 @@ Router source code for context:
 
 Write a complete pytest test file that:
 - Imports `from fastapi.testclient import TestClient` and `from app.main import app`
-- Mocks any calls to external services (OpenAI embeddings/chat calls, the
+- Mocks any calls to external services (Ollama embeddings/chat calls, the
   Chroma vector store) using `unittest.mock.patch` — tests must NOT make
   real network calls or require a real API key to run
 - Covers the happy path for each endpoint, validation errors (missing or

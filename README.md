@@ -10,15 +10,15 @@ video. If the answer isn't there, it says so instead of guessing.
 
 ![ContexTube landing page](docs/screenshots/landing.png)
 
-### Grounded chat
+### Grounded answer
 
-![ContexTube chat view](docs/screenshots/chat.png)
+![ContexTube grounded chat answer](docs/screenshots/chat.png)
 
 ## How it works
 
 1. `POST /api/index` — give it a YouTube URL. It pulls the transcript
-   (LangChain's `YoutubeLoader` first, `yt-dlp` as a fallback if that fails
-   or is blocked), chunks it, embeds it with OpenAI embeddings, and stores
+  (LangChain's `YoutubeLoader` first, `yt-dlp` as a fallback if that fails
+  or is blocked), chunks it, embeds it with Ollama, and stores
    it in a Chroma collection scoped to that video's ID.
 2. `POST /api/ask` — give it a `video_id` and a question. It retrieves the
    most relevant chunks and checks their similarity scores *before* calling
@@ -44,8 +44,8 @@ ollama pull nomic-embed-text
 ollama pull llama3.2
 ```
 
-If you previously indexed videos with OpenAI embeddings, remove the old local
-store before indexing them again:
+If you previously indexed videos with a different embedding model, remove the
+old local store before indexing them again:
 
 ```bash
 rm -rf chroma_store
@@ -110,17 +110,6 @@ python -m agent.test_writer app/routers/video.py
 Generated tests land in `tests/test_<router_name>.py`. To cover a new
 router you add later, just point it at that file — nothing else changes.
 
-The generated tests mock external calls (OpenAI, Chroma) so running them
-never costs money or needs a real `OPENAI_API_KEY`. The Anthropic key is
-only used by the agent itself, to generate the test code.
-
-## Next steps (not built yet)
-
-- Recommendation step: after answering, optionally suggest external
-  resources for concepts mentioned but not deeply explained — this is a
-  good candidate for a LangGraph step later (answer → decide whether to
-  recommend → search → respond), rather than cramming it into one chain
-- Persist a video_id → title/URL mapping so the frontend can show a
-  library of already-indexed videos instead of requiring the raw ID
-- Multi-video / cross-video Q&A (bigger scope change — separate project
-  phase, not a small addition)
+The generated tests mock external calls (Ollama, Chroma) so running them
+never requires a running model server. The Anthropic key is only used by the
+agent itself, to generate the test code.
