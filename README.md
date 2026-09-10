@@ -4,6 +4,16 @@ Video intelligence pipeline that takes a YouTube URL, transcribes/loads it, inde
 a vector store, and answers questions using only what's actually in the
 video. If the answer isn't there, it says so instead of guessing.
 
+## Screenshots
+
+### Landing page
+
+![ContexTube landing page](docs/screenshots/landing.png)
+
+### Grounded chat
+
+![ContexTube chat view](docs/screenshots/chat.png)
+
 ## How it works
 
 1. `POST /api/index` — give it a YouTube URL. It pulls the transcript
