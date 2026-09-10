@@ -16,14 +16,14 @@ video. If the answer isn't there, it says so instead of guessing.
 
 ## How it works
 
-1. `POST /api/index` — give it a YouTube URL. It pulls the transcript
+1. `POST /api/index` - give it a YouTube URL. It pulls the transcript
   (LangChain's `YoutubeLoader` first, `yt-dlp` as a fallback if that fails
   or is blocked), chunks it, embeds it with Ollama, and stores
    it in a Chroma collection scoped to that video's ID.
-2. `POST /api/ask` — give it a `video_id` and a question. It retrieves the
+2. `POST /api/ask` - give it a `video_id` and a question. It retrieves the
    most relevant chunks and checks their similarity scores *before* calling
    the LLM. If nothing clears the confidence threshold, it returns
-   "This wasn't covered in the video" without ever invoking the model —
+  "This wasn't covered in the video" without ever invoking the model -
    so the guardrail is structural, not just a prompt instruction.
 
 ## Setup
@@ -69,12 +69,12 @@ curl -X POST localhost:8000/api/ask \
 
 - `YoutubeLoader` (via `youtube-transcript-api`) gets rate-limited or
   blocked by YouTube periodically. The `yt-dlp` fallback in
-  `transcript_loader.py` exists specifically for this — if you see it
+  `transcript_loader.py` exists specifically for this - if you see it
   triggering often, that's expected, not a bug.
 - The LangChain-loader path currently returns one untimed blob of text
   (no per-line timestamps), so timestamp citations only work reliably
   when the yt-dlp fallback is the one that ran. Worth tightening later
-  if you want timestamps to always be available — see "Next steps."
+  if you want timestamps to always be available, improve this path directly.
 - `retrieval_score_threshold` in `.env` controls how strict the "was this
   covered" guardrail is. Chroma's relevance score isn't perfectly
   calibrated across embedding models, so tune this against a few real
@@ -82,7 +82,7 @@ curl -X POST localhost:8000/api/ask \
 
 ## Frontend
 
-Vite + React, no UI framework, no state library — just `useState` and
+Vite + React, no UI framework, no state library - just `useState` and
 `fetch`. Three states in one page: URL input, indexing status, chat.
 The vite dev server proxies `/api` to `http://localhost:8000`, so run the
 backend first.
@@ -98,7 +98,7 @@ npm run dev
 `agent/test_writer.py` is a small agentic loop: it pulls the app's *live*
 OpenAPI schema (so any endpoint you've added shows up automatically), asks
 Claude to write pytest tests for a given router, actually runs them, and
-if any fail, feeds the real pytest output back to Claude to fix — up to 3
+if any fail, feeds the real pytest output back to Claude to fix - up to 3
 attempts.
 
 ```bash
@@ -108,7 +108,7 @@ python -m agent.test_writer app/routers/video.py
 ```
 
 Generated tests land in `tests/test_<router_name>.py`. To cover a new
-router you add later, just point it at that file — nothing else changes.
+router you add later, just point it at that file - nothing else changes.
 
 The generated tests mock external calls (Ollama, Chroma) so running them
 never requires a running model server. The Anthropic key is only used by the
